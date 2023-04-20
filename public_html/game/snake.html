@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Lucas Poignard</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/brython@3.8.9/brython.min.js">
+    </script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/brython@3.8.9/brython_stdlib.js">
+    </script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/brython@3.11.0/brython.min.js">
+    </script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/brython@3.11.0/brython_stdlib.js">
+    </script>
+    <link rel="shortcut icon" href="images\photoCVblank.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+    <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script src="assets\js\script.js"></script>
+    <script src="assets\js\tel.js"></script>
+    <script src="assets\js\modale.js"></script>
+    <script src="assets\js\termynal.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://unpkg.com/scroll-lock"></script>
+    <style>
+        body {
+            overflow: hidden;
+        }
+
+        button {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+
+        }
+
+        button:hover {
+            border-color: rgb(68, 241, 68) !important;
+            color: rgb(194, 196, 194) !important;
+        }
+
+        body {
+            background-color: #161515;
+        }
+
+        canvas {
+            margin-top: 12%;
+            padding-left: 0;
+            padding-right: 0;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+            border: 1px;
+            border-style: solid;
+            border-color: #535353;
+        }
+    </style>
+
+</head>
+
+<body onload="brython()">
+    <nav class="navbar navbar-expand-lg navbar-dark menu shadow fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="images/logoo.png" alt="logo image">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="index.php">Accueil</a>
+                    </li>
+
+                    <li class="nav-item"><a class="nav-link" aria-current="page" href="index.php#projet">Mes projets</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="index.php#contact">contact</a></li>
+                    </li>
+                </ul>
+                <button type="button" class="rounded-pill btn-rounded" id="phoneButton"
+                    onclick="callOrMessage()"><ion-icon name="call-outline"></ion-icon>
+                    06 20 60 62 43
+                </button>
+
+            </div>
+        </div>
+    </nav>
+
+    <canvas id="game-board" width="400" height="400"></canvas>
+    <br>
+    <h3 id="score" class="text-center">Score: 0</h3>
+    <br>
+    <h6 id="high-score" class="text-center">High Score: 0</h6>
+    <br>
+    <div class="centered">
+        <button id="instructions-btn" class="btn btn-primary">Instructions</button>
+    </div>
+
+
+    <script type="text/python">
+
+        from browser import document, html, window
+        import random
+
+        score = 0
+        high_score = 0
+
+        px = py = 10
+        gs = tc = 20
+        ax = ay = 15
+        xv = yv = 0
+        trail = []
+        tail = 5
+
+        pre_pause = [0,0]
+        paused = False
+
+        def game():
+            global px, py, tc, gs, ax, ay, trail, tail, score
+            px += xv
+            py += yv
+            if px < 0:
+                px = tc-1
+            if px > tc-1:
+                px = 0
+            if py < 0:
+                py = tc-1
+            if py > tc-1:
+                py = 0
+            ctx.fillStyle = "black"
+            ctx.fillRect(0, 0, canvas.width, canvas.height)
+            ctx.fillStyle = "yellow"
+            for i in range(len(trail)):
+                ctx.fillRect(trail[i][0]*gs, trail[i][1]*gs, gs-2, gs-2)
+                if trail[i][0] == px and trail[i][1] == py:
+                    score = score if paused else 0
+                    tail = tail if paused else 5
+            trail.insert(0, [px, py])
+            while len(trail) > tail:
+                trail.pop()
+
+            if ax == px and ay == py:
+                tail += 1
+                ax = int(random.random()*tc)
+                ay = int(random.random()*tc)
+                score += 1
+            update_score(score)
+            ctx.fillStyle = "red"
+            ctx.fillRect(ax*gs, ay*gs, gs-2, gs-2)
+
+        def update_score(new_score):
+            global high_score
+            document["score"].innerHTML = "Score: " + str(new_score)
+            if new_score > high_score:
+                document["high-score"].innerHTML = "High Score: " + str(new_score)
+                high_score = new_score
+
+        def key_push(evt):
+            global xv, yv, pre_pause, paused
+            key = evt.keyCode
+            if key == 37 and not paused:
+                xv = -1
+                yv = 0
+            elif key == 38 and not paused:
+                xv = 0
+                yv = -1
+            elif key == 39 and not paused:
+                xv = 1
+                yv = 0
+            elif key == 40 and not paused:
+                xv = 0
+                yv = 1
+            elif key == 32:
+                temp = [xv, yv]
+                xv = pre_pause[0]
+                yv = pre_pause[1]
+                pre_pause = [*temp]
+                paused = not paused
+
+        def show_instructions(evt):
+            window.alert("Use the arrow keys to move and press spacebar to pause the game.")
+
+        canvas = document["game-board"]
+        ctx = canvas.getContext("2d")
+        document.addEventListener("keydown", key_push)
+        game_loop = window.setInterval(game, 1000/10)
+        instructions_btn = document["instructions-btn"]
+        instructions_btn.addEventListener("click", show_instructions)
+
+
+</script>
+
+</body>
+
+
+</html>

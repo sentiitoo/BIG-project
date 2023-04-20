@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Mon site web</title>
+	<!-- Inclure les fichiers Bootstrap et les autres fichiers CSS et JS nécessaires -->
+	<script>
+		function redirect() {
+			var userInput = document.getElementById("user-input").value;
+			if (userInput.toLowerCase() == "snake") {
+				window.location.href = "test.html";
+			}
+		}
+	</script>
+</head>
+
+<body>
+	<!-- Ajouter un formulaire contenant un champ de saisie ou une zone de texte -->
+	<form>
+		<label for="user-input">Entrez le mot "snake" :</label>
+		<input type="text" id="user-input" name="user-input" onkeyup="redirect()">
+	</form>
+</body>
+
+</html>

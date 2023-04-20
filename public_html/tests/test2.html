@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Jeu de memory</title>
+	<style>
+		.card {
+			background-color: #ddd;
+			border: 1px solid #999;
+			height: 100px;
+			width: 100px;
+			display: inline-block;
+			margin: 5px;
+			text-align: center;
+			font-size: 80px;
+			cursor: pointer;
+			transition: background-color 0.3s ease-in-out;
+		}
+
+		.card:hover {
+			background-color: #aaa;
+		}
+	</style>
+</head>
+<body>
+	<h1>Jeu de memory</h1>
+	<div id="gameBoard"></div>
+
+	<script>
+		var symbols = ['🐶', '🐱', '🐻', '🐸', '🦁', '🐯', '🐨', '🐼'];
+		var board = [];
+
+		// Mélange les symboles et les place sur le plateau de jeu
+		function createBoard() {
+  var shuffledSymbols = symbols.concat(symbols).sort(function() {
+    return 0.5 - Math.random();
+  });
+
+  for (var i = 0; i < shuffledSymbols.length; i++) {
+    var card = document.createElement('div');
+    card.innerHTML = shuffledSymbols[i];
+
+    // Ajoute les classes "card" et "revealed" après avoir défini le contenu de la carte
+    card.classList.add('card');
+    card.classList.add('revealed');
+
+    card.addEventListener('click', revealCard);
+    board.push(card);
+    document.getElementById('gameBoard').appendChild(card);
+  }
+}
+
+
+		var firstCard = null;
+		var secondCard = null;
+		var canClick = true;
+
+		// Retourne une carte et vérifie si deux cartes ont été retournées pour vérifier si elles correspondent
+		function revealCard() {
+			if (!canClick) {
+				return;
+			}
+
+			this.classList.add('revealed');
+
+			if (firstCard === null) {
+				firstCard = this;
+			} else {
+				secondCard = this;
+				canClick = false;
+				setTimeout(checkMatch, 1000);
+			}
+		}
+
+		// Vérifie si les deux cartes retournées correspondent
+		function checkMatch() {
+	if (firstCard.innerHTML === secondCard.innerHTML) {
+		firstCard.removeEventListener('click', revealCard);
+		secondCard.removeEventListener('click', revealCard);
+	} else {
+		setTimeout(function() {
+			firstCard.classList.remove('revealed');
+			secondCard.classList.remove('revealed');
+			firstCard = null;
+			secondCard = null;
+			canClick = true;
+		}, 1000);
+	}
+
+	firstCard = null;
+	secondCard = null;
+	canClick = true;
+
+	if (board.every(function(card) {
+		return !card.classList.contains('card');
+	})) {
+		alert('Bravo, vous avez gagné!');
+	}
+}
+
+
+		createBoard();
+	</script>
+</body>
+</html>
